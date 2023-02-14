@@ -1,4 +1,5 @@
 from tkinter import filedialog
+from Clear_screen import clear_screen
 
 def header():
     print("\n---------------------------------------------------------------------------")
@@ -69,7 +70,7 @@ def menu_default():
         if option==1:
             file_name = "Input_files\\PDG1.txt"
         elif option==2:
-            file_name = "Input_files\\PDG1.txt"
+            file_name = "Input_files\\PDG2.txt"
         elif option==3:
             file_name = "Input_files\\PDG3.txt"
         elif option==4:
@@ -79,3 +80,17 @@ def menu_default():
             print("Invalid option.")
 
     return file_name
+
+def rerun():
+    print()
+    print("Run the program again?")
+    print('\t0 -> No')
+    print('\t1 -> Yes')
+    option = int(input("Type 0 or 1: "))
+    if option==1:
+        run = True
+        clear_screen()
+    else:
+        run = False
+
+    return run
