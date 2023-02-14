@@ -14,9 +14,10 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
 
     best_global_assignment = best_assignment[:]
     best_global_hours = best_hours[:]
+    best_global_infeasibility = best_infeasibility
     best_global_cost = best_cost
 
-    print_results(best_assignment, best_cost, best_hours, availability, initial=True)
+    print_results(best_assignment, int(best_cost-(best_infeasibility*P)), best_hours, availability, initial=True)
     
     tabu_list = []
 
@@ -26,6 +27,7 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
         best_neighbor = None
         best_neighbor_cost = float('inf')
         best_neighbor_hours = []
+        best_neighbor_infeasibility = 0
 
         neighbors_hours = []
 
@@ -37,11 +39,12 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
 
         neighbors_cost = [calculate_cost(neighbor, neighbor_infeasibility, costs, P) for neighbor, neighbor_infeasibility in zip(neighbors, neighbors_infeasibility)]
 
-        for neighbor, neighbor_cost, neighbor_hours in zip(neighbors, neighbors_cost, neighbors_hours):
+        for neighbor, neighbor_cost, neighbor_hours, neighbor_infeasibility in zip(neighbors, neighbors_cost, neighbors_hours, neighbors_infeasibility):
             if neighbor_cost < best_neighbor_cost and neighbor not in tabu_list:
                 best_neighbor = neighbor
                 best_neighbor_cost = neighbor_cost
                 best_neighbor_hours = neighbor_hours
+                best_neighbor_infeasibility = neighbor_infeasibility
 
         if best_neighbor is None:
             break
@@ -49,6 +52,7 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
         best_assignment = best_neighbor
         best_cost = best_neighbor_cost
         best_hours = best_neighbor_hours
+        best_infeasibility = best_neighbor_infeasibility
 
         aux = calculate_hours(best_assignment, hours, nm)
         valid = True
@@ -58,6 +62,7 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
                 break
 
         if best_cost < best_global_cost and valid:
+            best_global_infeasibility = best_infeasibility
             best_global_assignment = best_assignment
             best_global_cost = best_cost
             best_global_hours = best_hours
@@ -67,6 +72,9 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
             tabu_list.pop(0)
 
         if verbose:
-            print_results(best_assignment, best_cost, best_hours, availability, it)
+            if best_neighbor_infeasibility == 0:
+                print_results(best_assignment, int(best_cost-(best_neighbor_infeasibility*P)), best_hours, availability, it, feasible=True)
+            else:
+                print_results(best_assignment, int(best_cost-(best_neighbor_infeasibility*P)), best_hours, availability, it)
 
-    return best_global_assignment, best_global_cost, best_global_hours, availability
+    return best_global_assignment, int(best_global_cost-(best_global_infeasibility*P)), best_global_hours, availability
