@@ -15,5 +15,5 @@ if __name__ == "__main__":
             best_assignment, best_cost, best_hours, availability = tabu_search(file_name, max_iter, tabu_size, P, verbose)
         
         print_results(best_assignment, best_cost, best_hours, availability, final=True)
-
+        
         run = rerun()

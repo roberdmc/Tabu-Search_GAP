@@ -1,12 +1,15 @@
 def print_results(best_assignment, best_cost, best_hours, availability, it=0, feasible=False, initial = False, final=False):
     if final:
-        print()
+        print("\n")
         print("---- Tabu Search completed successfully ----")
-        print()
-        print("--- Best valid result: ---")
+        print("\n")
+        print("--- Best result found: ---")
     elif initial:
         print()
-        print("--- Initial solution: ---")
+        if feasible:
+            print("--- Initial solution (Valid): ---")
+        else:
+            print("--- Initial solution (Not valid): ---")
     else:
         print()
         print(f"--- Iteration {it}: ---")
