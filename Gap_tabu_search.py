@@ -81,13 +81,6 @@ def tabu_search(file_name, max_iter=100, tabu_size=10, P=1.3, verbose=True):
         best_hours = best_neighbor_hours
         best_infeasibility = best_neighbor_infeasibility
 
-        #aux = calculate_hours(best_assignment, hours, num_mod)
-        #valid = True
-        #for n_hours, n_avaib in zip(best_hours, availability):
-        #    if n_hours > n_avaib:
-        #        valid = False
-        #        break
-
         #Se a melhor solução da iteração for válida e for melhor que a solução global, vira a melhor global
         if best_cost < best_global_cost and best_infeasibility==0:
             best_global_infeasibility = best_infeasibility
