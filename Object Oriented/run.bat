@@ -1,3 +1,3 @@
 @echo off
-python Sequential/main.py %*
+python main.py %*
 pause
